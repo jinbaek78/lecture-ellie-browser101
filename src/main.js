@@ -3,10 +3,12 @@ const timer = document.querySelector('.timer');
 const items = document.querySelector('.items');
 const carrotCount = 10;
 const bugCount = 10;
+const bgSound = new Audio('src/assets/sound/bg.mp3');
 let leftSeconds = 10;
 let timerIntervalId;
 
 button.addEventListener('click', () => {
+  bgSound.play();
   togglePlayStopButton();
   toggleTimer(timerIntervalId);
   makeItems('carrot', carrotCount, items);
