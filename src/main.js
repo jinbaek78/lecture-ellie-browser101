@@ -1,10 +1,13 @@
 const playStopButton = document.querySelector('.playControlButton');
 const playground = document.querySelector('.playground');
 const timer = document.querySelector('.timer');
-const carrotCount = 10;
+const carrot = document.querySelector('.carrotCount');
+const carrotCount = 3;
 const bugCount = 10;
 const backgroundSound = new Audio('src/assets/sound/bg.mp3');
 const alertSound = new Audio('src/assets/sound/alert.wav');
+const carrotPullSound = new Audio('src/assets/sound/carrot_pull.mp3');
+const gameWinSound = new Audio('src/assets/sound/game_win.mp3');
 const replayButton = document.querySelector('.replayButton');
 const resultBanner = document.querySelector('.resultBanner');
 const resultMessage = document.querySelector('.resultMessage');
@@ -16,12 +19,47 @@ const RESULT_MESSAGE = {
 
 let items = document.querySelector('.items');
 let leftSeconds = 10;
+let leftCarrotCount = carrotCount;
 let timerIntervalId;
 
 playStopButton.addEventListener('click', play);
 replayButton.addEventListener('click', rePlay);
+playground.addEventListener('click', (e) => {
+  const tagName = e.target.tagName;
+  const isCarrot = e.target.parentNode.dataset.type === 'carrot';
+  if (tagName !== 'IMG') {
+    return;
+  }
 
-function rePlay() {
+  if (isCarrot) {
+    items.removeChild(e.target.parentNode);
+    carrotPullSound.play();
+    carrot.textContent = --leftCarrotCount;
+
+    if (leftCarrotCount === 0) {
+      end('WIN');
+    }
+  }
+});
+
+function end(result) {
+  if (result !== 'WIN' && result !== 'LOSE') {
+    throw new Error('the result must be either win or lose');
+  }
+
+  backgroundSound.pause();
+  stopTimer(timerIntervalId);
+  playStopButton.classList.remove('stop');
+  playStopButton.classList.add('hide');
+  resultBanner.classList.add('show');
+  resultMessage.textContent = RESULT_MESSAGE[result];
+  gameWinSound.play();
+}
+
+function rePlay(result) {
+  leftCarrotCount = carrotCount;
+  carrot.textContent = leftCarrotCount;
+
   backgroundSound.play();
   resultBanner.classList.remove('show');
   playStopButton.classList.remove('hide');
@@ -43,7 +81,9 @@ function play() {
   }
 
   backgroundSound.play();
+  // TODO: split the function into a couple of functions that change the button from play to stop and play the bg sound and show result banner with message
   startStopGameAndShowReplayButton();
+  carrot.textContent = `${leftCarrotCount}`;
   toggleTimer(timerIntervalId);
 }
 
@@ -102,7 +142,7 @@ function makeItems(type, count, parent) {
     const item = document.createElement('li');
     const [top, left] = getRandomPosition();
     item.setAttribute('class', 'item');
-    item.setAttribute('data-id', URL.createObjectURL(new Blob()).substr(-36));
+    item.setAttribute('data-type', type);
     item.style.top = `${top}px`;
     item.style.left = `${left}px`;
     item.innerHTML = `
