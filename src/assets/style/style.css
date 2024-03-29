@@ -27,7 +27,7 @@ body {
   text-align: center;
 }
 
-.playControlBtn {
+.playControlButton {
   background-color: RGB(238, 212, 166);
   width: 100px;
   height: 100px;
@@ -41,29 +41,29 @@ body {
 }
 
 /* only show play button */
-.playControlBtn.play .playBtn {
+.playControlButton.play .playButton {
   display: block;
 }
 
-.playControlBtn.play .stopBtn {
+.playControlButton.play .stopButton {
   display: none;
 }
 
-.playControlBtn.play .replayBtn {
+.playControlButton.play .replayButton {
   display: none;
 }
 
 /* only show stop button */
 
-.playControlBtn.stop .playBtn {
+.playControlButton.stop .playButton {
   display: none;
 }
 
-.playControlBtn.stop .stopBtn {
+.playControlButton.stop .stopButton {
   display: block;
 }
 
-.playControlBtn.stop .replayBtn {
+.playControlButton.stop .replayButton {
   display: none;
 }
 
