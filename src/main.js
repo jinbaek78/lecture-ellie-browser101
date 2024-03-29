@@ -1,23 +1,66 @@
-const button = document.querySelector('.playControlButton');
+const playStopButton = document.querySelector('.playControlButton');
+const playground = document.querySelector('.playground');
 const timer = document.querySelector('.timer');
-const items = document.querySelector('.items');
 const carrotCount = 10;
 const bugCount = 10;
-const bgSound = new Audio('src/assets/sound/bg.mp3');
+const backgroundSound = new Audio('src/assets/sound/bg.mp3');
+const alertSound = new Audio('src/assets/sound/alert.wav');
+const replayButton = document.querySelector('.replayButton');
+const resultBanner = document.querySelector('.resultBanner');
+const resultMessage = document.querySelector('.resultMessage');
+const RESULT_MESSAGE = {
+  WIN: 'You Win🎉',
+  LOSE: 'You Lose😢',
+  REPLAY: 'Replay ❓',
+};
+
+let items = document.querySelector('.items');
 let leftSeconds = 10;
 let timerIntervalId;
 
-button.addEventListener('click', () => {
-  bgSound.play();
-  togglePlayStopButton();
+playStopButton.addEventListener('click', play);
+replayButton.addEventListener('click', rePlay);
+
+function rePlay() {
+  backgroundSound.play();
+  resultBanner.classList.remove('show');
+  playStopButton.classList.remove('hide');
+  playStopButton.classList.add('stop');
   toggleTimer(timerIntervalId);
+
+  items.remove();
+  items = document.createElement('ul');
+  items.setAttribute('class', 'items');
+  playground.appendChild(items);
   makeItems('carrot', carrotCount, items);
   makeItems('bug', carrotCount, items);
-});
+}
 
-function togglePlayStopButton() {
-  button.classList.toggle('play');
-  button.classList.toggle('stop');
+function play() {
+  if (playStopButton.classList.contains('play')) {
+    makeItems('carrot', carrotCount, items);
+    makeItems('bug', carrotCount, items);
+  }
+
+  backgroundSound.play();
+  startStopGameAndShowReplayButton();
+  toggleTimer(timerIntervalId);
+}
+
+function startStopGameAndShowReplayButton() {
+  if (playStopButton.classList.contains('play')) {
+    playStopButton.classList.remove('play');
+    playStopButton.classList.add('stop');
+    return;
+  }
+
+  playStopButton.classList.remove('stop');
+  playStopButton.classList.add('hide');
+
+  resultBanner.classList.add('show');
+  backgroundSound.pause();
+  alertSound.play();
+  resultMessage.textContent = RESULT_MESSAGE['REPLAY'];
 }
 
 function toggleTimer(timerIntervalId) {
@@ -49,7 +92,6 @@ function getRandomPosition() {
   return [RANDOM_TOP, RANDOM_LEFT];
 }
 
-let tempId = 0;
 function makeItems(type, count, parent) {
   if (type !== 'carrot' && type !== 'bug') {
     throw new Error('Type must be either carrot or bug');

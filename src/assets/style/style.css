@@ -28,6 +28,7 @@ body {
 }
 
 .playControlButton {
+  /* visibility: hidden; */
   background-color: RGB(238, 212, 166);
   width: 100px;
   height: 100px;
@@ -45,11 +46,11 @@ body {
   display: block;
 }
 
-.playControlButton.play .stopButton {
-  display: none;
+.playControlButton.play .playControlButton {
+  visibility: visible;
 }
 
-.playControlButton.play .replayButton {
+.playControlButton.play .stopButton {
   display: none;
 }
 
@@ -65,6 +66,10 @@ body {
 
 .playControlButton.stop .replayButton {
   display: none;
+}
+/* hide play or stop button */
+.playControlButton.hide {
+  visibility: hidden;
 }
 
 .flex-center {
@@ -118,18 +123,20 @@ body {
   background-color: rgba(0, 0, 0, 0.7);
   padding-bottom: 1.2rem;
   width: 600px;
-  height: 180px;
+  height: 200px;
   border-radius: 30px;
   top: 25%;
   left: 25%;
+  z-index: 10;
 }
 
 .resultBanner.show {
   display: block;
 }
 
-.result {
+.resultMessage {
   color: white;
   font-size: 3rem;
   margin: 0.2rem 0;
+  margin-bottom: 1rem;
 }
