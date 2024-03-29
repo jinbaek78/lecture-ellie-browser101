@@ -16,12 +16,12 @@ const RESULT_MESSAGE = {
   LOSE: 'You Lose😢',
   REPLAY: 'Replay ❓',
 };
-
 let items = document.querySelector('.items');
 let leftSeconds = 10;
 let leftCarrotCount = carrotCount;
 let timerIntervalId;
 
+carrotPullSound.playbackRate = 10;
 playStopButton.addEventListener('click', play);
 replayButton.addEventListener('click', rePlay);
 playground.addEventListener('click', (e) => {
@@ -115,6 +115,10 @@ function startTimer() {
   timerIntervalId = setInterval(() => {
     if (leftSeconds > 0) {
       timer.textContent = `0:${--leftSeconds}`;
+      // TODO: end the game when the timer is done
+      if (leftSeconds === 0) {
+        console.log('done!');
+      }
     }
   }, 1000);
 }
