@@ -1,4 +1,4 @@
-const playStopButton = document.querySelector('.playControlButton');
+const playEndButton = document.querySelector('.playControlButton');
 const playground = document.querySelector('.playground');
 const timer = document.querySelector('.timer');
 const carrot = document.querySelector('.carrotCount');
@@ -21,9 +21,10 @@ let items = document.querySelector('.items');
 let leftSeconds = timeLimit;
 let leftCarrotCount = initialCarrotCount;
 let timerIntervalId;
+let gameState = 'ready' || 'play' || 'end';
 
 carrotPullSound.playbackRate = 10;
-playStopButton.addEventListener('click', play);
+playEndButton.addEventListener('click', playOrEndGame);
 replayButton.addEventListener('click', rePlay);
 playground.addEventListener('click', (e) => {
   const tagName = e.target.tagName;
@@ -50,8 +51,8 @@ function end(result) {
 
   backgroundSound.pause();
   stopTimer(timerIntervalId);
-  playStopButton.classList.remove('stop');
-  playStopButton.classList.add('hide');
+  playEndButton.classList.remove('end');
+  playEndButton.classList.add('hide');
   resultBanner.classList.add('show');
   resultMessage.textContent = RESULT_MESSAGE[result];
   gameWinSound.play();
@@ -65,8 +66,8 @@ function rePlay() {
 
   backgroundSound.play();
   resultBanner.classList.remove('show');
-  playStopButton.classList.remove('hide');
-  playStopButton.classList.add('stop');
+  playEndButton.classList.remove('hide');
+  playEndButton.classList.add('end');
   toggleTimer(timerIntervalId);
 
   items.remove();
@@ -77,33 +78,32 @@ function rePlay() {
   makeItems('bug', initialCarrotCount, items);
 }
 
-function play() {
-  if (playStopButton.classList.contains('play')) {
+function playOrEndGame() {
+  if (playEndButton.classList.contains('play')) {
     makeItems('carrot', initialCarrotCount, items);
     makeItems('bug', initialCarrotCount, items);
+    carrot.textContent = leftCarrotCount;
+    backgroundSound.play();
+  } else {
+    alertSound.play();
+    backgroundSound.pause();
+    resultBanner.classList.add('show');
+    resultMessage.textContent = RESULT_MESSAGE['REPLAY'];
   }
 
-  backgroundSound.play();
-  // TODO: split the function into a couple of functions that change the button from play to stop and play the bg sound and show result banner with message
-  startStopGameAndShowReplayButton();
-  carrot.textContent = leftCarrotCount;
+  toggleButtonState();
   toggleTimer(timerIntervalId);
 }
 
-function startStopGameAndShowReplayButton() {
-  if (playStopButton.classList.contains('play')) {
-    playStopButton.classList.remove('play');
-    playStopButton.classList.add('stop');
+function toggleButtonState() {
+  if (playEndButton.classList.contains('play')) {
+    playEndButton.classList.remove('play');
+    playEndButton.classList.add('end');
     return;
   }
 
-  playStopButton.classList.remove('stop');
-  playStopButton.classList.add('hide');
-
-  resultBanner.classList.add('show');
-  backgroundSound.pause();
-  alertSound.play();
-  resultMessage.textContent = RESULT_MESSAGE['REPLAY'];
+  playEndButton.classList.remove('end');
+  playEndButton.classList.add('hide');
 }
 
 function toggleTimer(timerIntervalId) {

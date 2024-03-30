@@ -54,20 +54,20 @@ body {
   display: none;
 }
 
-/* only show stop button */
+/* only show end button */
 
-.playControlButton.stop .playButton {
+.playControlButton.end .playButton {
   display: none;
 }
 
-.playControlButton.stop .stopButton {
+.playControlButton.end .stopButton {
   display: block;
 }
 
-.playControlButton.stop .replayButton {
+.playControlButton.end .replayButton {
   display: none;
 }
-/* hide play or stop button */
+/* hide play or end button */
 .playControlButton.hide {
   visibility: hidden;
 }
