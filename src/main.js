@@ -25,9 +25,11 @@ let leftCarrotCount = initialCarrotCount;
 let timerIntervalId;
 
 carrotPullSound.playbackRate = 10;
-playEndButton.addEventListener('click', playOrEndGame);
-replayButton.addEventListener('click', rePlay);
-playground.addEventListener('click', (e) => {
+playEndButton.addEventListener('click', onPlayEndButtonClick);
+replayButton.addEventListener('click', onReplayButtonClick);
+playground.addEventListener('click', onCarrotOrBugClick);
+
+function onCarrotOrBugClick(e) {
   const tagName = e.target.tagName;
   const isCarrot = e.target.parentNode.dataset.type === 'carrot';
   if (tagName !== 'IMG') {
@@ -47,7 +49,7 @@ playground.addEventListener('click', (e) => {
 
   bugPullSound.play();
   end('LOSE');
-});
+}
 
 function end(result) {
   if (result !== 'WIN' && result !== 'LOSE') {
@@ -69,7 +71,7 @@ function end(result) {
   }
 }
 
-function rePlay() {
+function onReplayButtonClick() {
   leftCarrotCount = initialCarrotCount;
   carrot.textContent = leftCarrotCount;
   leftSeconds = timeLimit;
@@ -89,7 +91,7 @@ function rePlay() {
   makeItems('bug', initialCarrotCount, items);
 }
 
-function playOrEndGame() {
+function onPlayEndButtonClick() {
   if (playEndButton.classList.contains('play')) {
     makeItems('carrot', initialCarrotCount, items);
     makeItems('bug', initialCarrotCount, items);
@@ -129,7 +131,6 @@ function startTimer() {
   timerIntervalId = setInterval(() => {
     if (leftSeconds > 0) {
       timer.textContent = `0:${--leftSeconds}`;
-      // TODO: end the game when the timer is done
       if (leftSeconds === 0) {
         end('LOSE');
       }
