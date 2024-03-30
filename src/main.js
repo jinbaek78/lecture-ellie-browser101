@@ -2,8 +2,8 @@ const playStopButton = document.querySelector('.playControlButton');
 const playground = document.querySelector('.playground');
 const timer = document.querySelector('.timer');
 const carrot = document.querySelector('.carrotCount');
-const carrotCount = 3;
-const bugCount = 10;
+const initialCarrotCount = 3;
+const initialBugCount = 10;
 const backgroundSound = new Audio('src/assets/sound/bg.mp3');
 const alertSound = new Audio('src/assets/sound/alert.wav');
 const carrotPullSound = new Audio('src/assets/sound/carrot_pull.mp3');
@@ -16,9 +16,10 @@ const RESULT_MESSAGE = {
   LOSE: 'You Lose😢',
   REPLAY: 'Replay ❓',
 };
+const timeLimit = 10;
 let items = document.querySelector('.items');
-let leftSeconds = 10;
-let leftCarrotCount = carrotCount;
+let leftSeconds = timeLimit;
+let leftCarrotCount = initialCarrotCount;
 let timerIntervalId;
 
 carrotPullSound.playbackRate = 10;
@@ -56,9 +57,11 @@ function end(result) {
   gameWinSound.play();
 }
 
-function rePlay(result) {
-  leftCarrotCount = carrotCount;
+function rePlay() {
+  leftCarrotCount = initialCarrotCount;
   carrot.textContent = leftCarrotCount;
+  leftSeconds = timeLimit;
+  timer.textContent = `0:${leftSeconds}`;
 
   backgroundSound.play();
   resultBanner.classList.remove('show');
@@ -70,20 +73,20 @@ function rePlay(result) {
   items = document.createElement('ul');
   items.setAttribute('class', 'items');
   playground.appendChild(items);
-  makeItems('carrot', carrotCount, items);
-  makeItems('bug', carrotCount, items);
+  makeItems('carrot', initialCarrotCount, items);
+  makeItems('bug', initialCarrotCount, items);
 }
 
 function play() {
   if (playStopButton.classList.contains('play')) {
-    makeItems('carrot', carrotCount, items);
-    makeItems('bug', carrotCount, items);
+    makeItems('carrot', initialCarrotCount, items);
+    makeItems('bug', initialCarrotCount, items);
   }
 
   backgroundSound.play();
   // TODO: split the function into a couple of functions that change the button from play to stop and play the bg sound and show result banner with message
   startStopGameAndShowReplayButton();
-  carrot.textContent = `${leftCarrotCount}`;
+  carrot.textContent = leftCarrotCount;
   toggleTimer(timerIntervalId);
 }
 
