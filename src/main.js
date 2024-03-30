@@ -9,6 +9,7 @@ const alertSound = new Audio('src/assets/sound/alert.wav');
 const carrotPullSound = new Audio('src/assets/sound/carrot_pull.mp3');
 const bugPullSound = new Audio('src/assets/sound/bug_pull.mp3');
 const gameWinSound = new Audio('src/assets/sound/game_win.mp3');
+const gameLoseSound = new Audio('src/assets/sound/game_lose.mp3');
 const replayButton = document.querySelector('.replayButton');
 const resultBanner = document.querySelector('.resultBanner');
 const resultMessage = document.querySelector('.resultMessage');
@@ -17,7 +18,7 @@ const RESULT_MESSAGE = {
   LOSE: 'You Lose😢',
   REPLAY: 'Replay ❓',
 };
-const timeLimit = 10;
+const timeLimit = 3;
 let items = document.querySelector('.items');
 let leftSeconds = timeLimit;
 let leftCarrotCount = initialCarrotCount;
@@ -59,7 +60,13 @@ function end(result) {
   playEndButton.classList.add('hide');
   resultBanner.classList.add('show');
   resultMessage.textContent = RESULT_MESSAGE[result];
-  result === 'WIN' && gameWinSound.play();
+  if (result === 'WIN') {
+    gameWinSound.play();
+  } else {
+    setTimeout(() => {
+      gameLoseSound.play();
+    }, 300);
+  }
 }
 
 function rePlay() {
@@ -124,7 +131,7 @@ function startTimer() {
       timer.textContent = `0:${--leftSeconds}`;
       // TODO: end the game when the timer is done
       if (leftSeconds === 0) {
-        console.log('done!');
+        end('LOSE');
       }
     }
   }, 1000);
