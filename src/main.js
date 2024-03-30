@@ -7,6 +7,7 @@ const initialBugCount = 10;
 const backgroundSound = new Audio('src/assets/sound/bg.mp3');
 const alertSound = new Audio('src/assets/sound/alert.wav');
 const carrotPullSound = new Audio('src/assets/sound/carrot_pull.mp3');
+const bugPullSound = new Audio('src/assets/sound/bug_pull.mp3');
 const gameWinSound = new Audio('src/assets/sound/game_win.mp3');
 const replayButton = document.querySelector('.replayButton');
 const resultBanner = document.querySelector('.resultBanner');
@@ -21,7 +22,6 @@ let items = document.querySelector('.items');
 let leftSeconds = timeLimit;
 let leftCarrotCount = initialCarrotCount;
 let timerIntervalId;
-let gameState = 'ready' || 'play' || 'end';
 
 carrotPullSound.playbackRate = 10;
 playEndButton.addEventListener('click', playOrEndGame);
@@ -41,7 +41,11 @@ playground.addEventListener('click', (e) => {
     if (leftCarrotCount === 0) {
       end('WIN');
     }
+    return;
   }
+
+  bugPullSound.play();
+  end('LOSE');
 });
 
 function end(result) {
@@ -55,7 +59,7 @@ function end(result) {
   playEndButton.classList.add('hide');
   resultBanner.classList.add('show');
   resultMessage.textContent = RESULT_MESSAGE[result];
-  gameWinSound.play();
+  result === 'WIN' && gameWinSound.play();
 }
 
 function rePlay() {
