@@ -38,6 +38,13 @@ body {
   transform: scale(1.1);
 }
 
+.fa-play.hide {
+  display: none;
+}
+.fa-stop.hide {
+  display: none;
+}
+
 .game__timer {
   width: 100px;
   background-color: white;
@@ -46,6 +53,10 @@ body {
   border-radius: 20px;
   font-size: 32px;
   margin-top: 8px;
+}
+
+.game__timer.hide {
+  visibility: hidden;
 }
 
 .game__score {
@@ -58,6 +69,10 @@ body {
   border: 3px solid black;
   background-color: darksalmon;
   color: white;
+}
+
+.game__score.hide {
+  visibility: hidden;
 }
 
 .game__field {

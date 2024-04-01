@@ -1,12 +1,58 @@
 const CARROT_SIZE = 80;
 const field = document.querySelector('.game__field');
 const fieldRect = field.getBoundingClientRect();
+const playOrEndButton = document.querySelector('.game__button');
+const playIcon = document.querySelector('.fa-play');
+const endIcon = document.querySelector('.fa-stop');
+const score = document.querySelector('.game__score');
+const timer = document.querySelector('.game__timer');
+const timeLimit = 10;
+const initialCarrotCount = 10;
+let timerId;
+let leftSeconds = timeLimit;
+
+playOrEndButton.addEventListener('click', () => {
+  initGame();
+});
 
 function initGame() {
-  //
-  console.log(fieldRect);
+  toggleButtonStatus();
+  timer.classList.remove('hide');
+  startTimer();
+  score.classList.remove('hide');
+  score.textContent = initialCarrotCount;
   addItem('carrot', 5, 'img/carrot.png');
   addItem('bug', 5, 'img/bug.png');
+}
+
+function startTimer() {
+  if (timerId == null) {
+    timerId = setInterval(() => {
+      timer.textContent = `0:${--leftSeconds}`;
+    }, 1000);
+  }
+}
+
+function stopTimer() {
+  if (timerId !== null) {
+    clearInterval(timerId);
+    timerId = null;
+  }
+}
+
+function toggleStartStopTimer() {
+  if (timerId == null) {
+    clearInterval(timerId);
+    timerId = null;
+    return;
+  }
+
+  timerId = setInterval(() => {}, 1000);
+}
+
+function toggleButtonStatus() {
+  playIcon.classList.toggle('hide');
+  endIcon.classList.toggle('hide');
 }
 
 function addItem(className, count, imgPath) {
@@ -30,5 +76,3 @@ function addItem(className, count, imgPath) {
 function randomNumber(min, max) {
   return Math.random() * (max - min) + min;
 }
-
-initGame();
