@@ -2,12 +2,19 @@ const CARROT_SIZE = 80;
 const CARROT_COUNT = 5;
 const BUG_COUNT = 5;
 const GAME_DURATION_SEC = 5;
+const POPUP_MESSAGE = {
+  REPLAY: 'REPLAY?',
+  WIN: 'You Win',
+  LOSE: 'You Lose',
+};
 
 const field = document.querySelector('.game__field');
 const fieldRect = field.getBoundingClientRect();
 const gameBtn = document.querySelector('.game__button');
 const gameTimer = document.querySelector('.game__timer');
 const gameScore = document.querySelector('.game__score');
+const popUp = document.querySelector('.pop-up');
+const popUpMessage = document.querySelector('.pop-up__message');
 
 let started = false;
 let score = 0;
@@ -32,7 +39,9 @@ function startGame() {
 }
 
 function stopGame() {
-  console.log('stopGame');
+  hideGameBtn();
+  stopGameTimer();
+  showPopUp(POPUP_MESSAGE['REPLAY']);
 }
 
 function showStopButton() {
@@ -57,6 +66,22 @@ function startGameTimer() {
     }
     updateTimerText(--remainingTimeSec);
   }, 1000);
+}
+
+function stopGameTimer() {
+  if (timer != undefined) {
+    clearInterval(timer);
+    timer = undefined;
+  }
+}
+
+function hideGameBtn() {
+  gameBtn.classList.add('hide');
+}
+
+function showPopUp(message) {
+  popUp.classList.remove('pop-up--hide');
+  popUpMessage.innerHTML = message;
 }
 
 function updateTimerText(time) {

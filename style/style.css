@@ -34,6 +34,10 @@ body {
   transition: transform 300ms ease-in;
 }
 
+.game__button.hide {
+  visibility: hidden;
+}
+
 .game__button:hover {
   transform: scale(1.1);
 }
