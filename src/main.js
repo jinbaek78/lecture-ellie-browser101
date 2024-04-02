@@ -21,13 +21,12 @@ const bugPullSound = new Audio('sound/bug_pull.mp3');
 const gameWinSound = new Audio('sound/game_win.mp3');
 
 let started = false;
-let score = 5;
+let remainingCarrotCount = CARROT_COUNT;
 let timer = undefined;
 
 carrotPullSound.playbackRate = PLAYBACK_SPEED;
 
 gameBtn.addEventListener('click', () => {
-  console.log(started);
   if (started) {
     stopGame();
   } else {
@@ -53,9 +52,13 @@ field.addEventListener('click', (e) => {
 
   if (isCarrot) {
     carrotPullSound.play();
-    setTimeout(() => {
-      stopGame('win');
-    }, 300);
+    gameScore.innerHTML = `${--remainingCarrotCount}`;
+    field.removeChild(e.target);
+    if (remainingCarrotCount === 0) {
+      setTimeout(() => {
+        stopGame('win');
+      }, 300);
+    }
     return;
   }
 
@@ -94,7 +97,6 @@ function stopGame(reason = 'stop', mute = false) {
     !mute && alertSound.play();
     text = 'You Lose';
   }
-  console.log(reason, text);
   showPopUpWithText(text);
 }
 
@@ -141,6 +143,7 @@ function updateTimerText(time) {
 function initGame() {
   bgSound.play();
   field.innerHTML = '';
+  remainingCarrotCount = CARROT_COUNT;
   gameScore.innerHTML = CARROT_COUNT;
   addItem('carrot', CARROT_COUNT, 'img/carrot.png');
   addItem('bug', BUG_COUNT, 'img/bug.png');
