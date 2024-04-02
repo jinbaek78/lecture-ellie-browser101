@@ -9,6 +9,10 @@ const gameBtn = document.querySelector('.game__button');
 const gameTimer = document.querySelector('.game__timer');
 const gameScore = document.querySelector('.game__score');
 
+const popUp = document.querySelector('.pop-up');
+const popUpText = document.querySelector('.pop-up__message');
+const popUpRefresh = document.querySelector('.pop-up__refresh');
+
 let started = false;
 let score = 0;
 let timer = undefined;
@@ -32,7 +36,9 @@ function startGame() {
 }
 
 function stopGame() {
-  console.log('stopGame');
+  stopGameTimer();
+  hideGameButton();
+  showPopUpWithText('REPLAY?');
 }
 
 function showStopButton() {
@@ -40,6 +46,10 @@ function showStopButton() {
   const icon = gameBtn.querySelector('.fa-play');
   icon.classList.add('fa-stop');
   icon.classList.remove('fa-play');
+}
+
+function hideGameButton() {
+  gameBtn.style.visibility = 'hidden';
 }
 
 function showTimerAndScore() {
@@ -59,6 +69,10 @@ function startGameTimer() {
   }, 1000);
 }
 
+function stopGameTimer() {
+  clearInterval(timer);
+}
+
 function updateTimerText(time) {
   const minutes = Math.floor(time / 60);
   const seconds = time % 60;
@@ -70,6 +84,11 @@ function initGame() {
   gameScore.innerHTML = CARROT_COUNT;
   addItem('carrot', CARROT_COUNT, 'img/carrot.png');
   addItem('bug', BUG_COUNT, 'img/bug.png');
+}
+
+function showPopUpWithText(text) {
+  popUpText.innerHTML = text;
+  popUp.classList.remove('pop-up--hide');
 }
 
 function addItem(className, count, imgPath) {
