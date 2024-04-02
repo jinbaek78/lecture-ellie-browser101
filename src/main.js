@@ -2,6 +2,7 @@ const CARROT_SIZE = 80;
 const CARROT_COUNT = 5;
 const BUG_COUNT = 5;
 const GAME_DURATION_SEC = 5;
+const PLAYBACK_SPEED = 10;
 
 const field = document.querySelector('.game__field');
 const fieldRect = field.getBoundingClientRect();
@@ -13,25 +14,53 @@ const popUp = document.querySelector('.pop-up');
 const popUpText = document.querySelector('.pop-up__message');
 const popUpRefresh = document.querySelector('.pop-up__refresh');
 
+const bgSound = new Audio('sound/bg.mp3');
+const alertSound = new Audio('sound/alert.wav');
+const carrotPullSound = new Audio('sound/carrot_pull.mp3');
+const bugPullSound = new Audio('sound/bug_pull.mp3');
+const gameWinSound = new Audio('sound/game_win.mp3');
+
 let started = false;
 let score = 5;
 let timer = undefined;
 
+carrotPullSound.playbackRate = PLAYBACK_SPEED;
+
 gameBtn.addEventListener('click', () => {
+  console.log(started);
   if (started) {
     stopGame();
   } else {
     startGame();
   }
-
   started = !started;
 });
 
 popUpRefresh.addEventListener('click', () => {
+  started = true;
   showGameButton();
   startGameTimer();
   initGame();
   hidePopUp();
+});
+
+field.addEventListener('click', (e) => {
+  const carrotOrBug = e.target.tagName === 'IMG';
+  const isCarrot = e.target.className === 'carrot';
+  if (!carrotOrBug) {
+    return;
+  }
+
+  if (isCarrot) {
+    carrotPullSound.play();
+    setTimeout(() => {
+      stopGame('win');
+    }, 300);
+    return;
+  }
+
+  bugPullSound.play();
+  stopGame('lose', true);
 });
 
 function hidePopUp() {
@@ -50,10 +79,23 @@ function startGame() {
   startGameTimer();
 }
 
-function stopGame() {
+function stopGame(reason = 'stop', mute = false) {
+  bgSound.pause();
   stopGameTimer();
   hideGameButton();
-  showPopUpWithText('REPLAY?');
+  let text = 'REPLAY?';
+
+  if (reason === 'stop') {
+    alertSound.play();
+  } else if (reason === 'win') {
+    gameWinSound.play();
+    text = 'You Win!';
+  } else if (reason === 'lose') {
+    !mute && alertSound.play();
+    text = 'You Lose';
+  }
+  console.log(reason, text);
+  showPopUpWithText(text);
 }
 
 function showStopButton() {
@@ -79,6 +121,7 @@ function startGameTimer() {
   timer = setInterval(() => {
     if (remainingTimeSec <= 0) {
       clearInterval(timer);
+      stopGame('lose');
       return;
     }
     updateTimerText(--remainingTimeSec);
@@ -96,6 +139,7 @@ function updateTimerText(time) {
 }
 
 function initGame() {
+  bgSound.play();
   field.innerHTML = '';
   gameScore.innerHTML = CARROT_COUNT;
   addItem('carrot', CARROT_COUNT, 'img/carrot.png');
