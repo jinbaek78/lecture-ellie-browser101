@@ -14,7 +14,7 @@ const popUpText = document.querySelector('.pop-up__message');
 const popUpRefresh = document.querySelector('.pop-up__refresh');
 
 let started = false;
-let score = 0;
+let score = 5;
 let timer = undefined;
 
 gameBtn.addEventListener('click', () => {
@@ -25,9 +25,24 @@ gameBtn.addEventListener('click', () => {
   }
 
   started = !started;
-  console.log('åfter started: ', started);
 });
 
+popUpRefresh.addEventListener('click', () => {
+  showGameButton();
+  startGameTimer();
+  initGame();
+  hidePopUp();
+});
+
+function hidePopUp() {
+  popUp.classList.add('pop-up--hide');
+}
+
+function showGameButton() {
+  gameBtn.style.visibility = 'visible';
+}
+
+//
 function startGame() {
   initGame();
   showStopButton();
@@ -42,10 +57,11 @@ function stopGame() {
 }
 
 function showStopButton() {
-  console.log('before started: ', started);
   const icon = gameBtn.querySelector('.fa-play');
-  icon.classList.add('fa-stop');
-  icon.classList.remove('fa-play');
+  if (icon) {
+    icon.classList.add('fa-stop');
+    icon.classList.remove('fa-play');
+  }
 }
 
 function hideGameButton() {
