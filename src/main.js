@@ -1,5 +1,6 @@
 import Field from './field.js';
 import PopUp from './popup.js';
+import * as sound from './sound.js';
 
 const CARROT_COUNT = 5;
 const BUG_COUNT = 5;
@@ -40,7 +41,6 @@ function onItemClick(item) {
       finishGame(true);
     }
   } else if (item === 'bug') {
-    console.log('bug sound -');
     finishGame(false);
   }
 }
@@ -59,7 +59,7 @@ function startGame() {
   showStopButton();
   showTimerAndScore();
   startGameTimer();
-  playSound(bgSound);
+  sound.playBackground();
 }
 
 function stopGame() {
@@ -67,8 +67,8 @@ function stopGame() {
   stopGameTimer();
   hideGameButton();
   gameFinishBanner.showWithText('REPLAY?');
-  playSound(alertSound);
-  stopSound(bgSound);
+  sound.playAlert();
+  sound.stopBackground();
 }
 
 function showStopButton() {
@@ -116,26 +116,17 @@ function initGame() {
   gameField.init();
 }
 
-function playSound(sound) {
-  sound.currentTime = 0;
-  sound.play();
-}
-
-function stopSound(sound) {
-  sound.pause();
-}
-
 function finishGame(win) {
   started = false;
   hideGameButton();
   console.log('isWIn', win);
   if (win) {
-    playSound(windSound);
+    sound.playWin();
   } else {
-    playSound(bugSound);
+    sound.playAlert();
   }
   stopGameTimer();
-  stopSound(bgSound);
+  sound.stopBackground();
   gameFinishBanner.showWithText(win ? 'You Win' : 'You Lose');
 }
 
