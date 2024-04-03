@@ -11,12 +11,12 @@ export default class Field {
 
     this.field = document.querySelector('.game__field');
     this.fieldRect = this.field.getBoundingClientRect();
-    //  this value below code is <section> element : this is a binding bug
-    // this.field.addEventListener('click', this.onClick);
-    // this value below code is Field class which can access this.onItemClick
-    this.field.addEventListener('click', (e) => {
-      this.onClick(e);
-    });
+    // #1. bind this value to this Field class using Function.bind
+    // this.onClick = this.onClick.bind(this);
+
+    this.field.addEventListener('click', this.onClick);
+    // #2. use arrow function to bind the this value in onclick to this Field class
+    // this.field.addEventListener('click', (e) => this.onClick(e));
   }
 
   init() {
@@ -25,20 +25,35 @@ export default class Field {
     this.#addItem('bug', this.bugCount, 'img/bug.png');
   }
 
-  onClick(event) {
-    const target = event.target;
+  // #3. define class emthods intially using arrow functions to bind the 'this' value to this class
+  onClick = (e) => {
+    const target = e.target;
     if (target.matches('.carrot')) {
       target.remove();
       sound.playCarrot();
-      console.log('onClick, this: ', this);
+      console.log('onClick, this: ', this, this.onItemClick);
 
       this.onItemClick && this.onItemClick('carrot');
     } else if (target.matches('.bug')) {
-      console.log('onClick, this: ', this);
+      console.log('onClick, this: ', this, this.onItemClick);
 
       this.onItemClick && this.onItemClick('bug');
     }
-  }
+  };
+  // onClick(e) {
+  //   const target = e.target;
+  //   if (target.matches('.carrot')) {
+  //     target.remove();
+  //     sound.playCarrot();
+  //     console.log('onClick, this: ', this, this.onItemClick);
+
+  //     this.onItemClick && this.onItemClick('carrot');
+  //   } else if (target.matches('.bug')) {
+  //     console.log('onClick, this: ', this, this.onItemClick);
+
+  //     this.onItemClick && this.onItemClick('bug');
+  //   }
+  // }
 
   #addItem(className, count, imgPath) {
     const x1 = 0;
