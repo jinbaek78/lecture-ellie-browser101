@@ -31,11 +31,11 @@ export default class Field {
     if (target.matches('.carrot')) {
       target.remove();
       sound.playCarrot();
-      console.log('onClick, this: ', this, this.onItemClick);
+      // console.log('onClick, this: ', this, this.onItemClick);
 
       this.onItemClick && this.onItemClick('carrot');
     } else if (target.matches('.bug')) {
-      console.log('onClick, this: ', this, this.onItemClick);
+      // console.log('onClick, this: ', this, this.onItemClick);
 
       this.onItemClick && this.onItemClick('bug');
     }
