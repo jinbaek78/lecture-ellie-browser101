@@ -1,8 +1,12 @@
-import Game from './game.js';
+import GameBuilder from './game.js';
 import PopUp from './popup.js';
 
 const gameFinishBanner = new PopUp();
-const game = new Game(2, 2, 2);
+const game = new GameBuilder() //
+  .gameDuration(5)
+  .carrotCount(3)
+  .bugCount(3)
+  .build();
 game.setGameStopListener((reason) => {
   let message;
   switch (reason) {
