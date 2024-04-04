@@ -3,9 +3,9 @@ import PopUp from './popup.js';
 
 const gameFinishBanner = new PopUp();
 const game = new GameBuilder() //
-  .gameDuration(5)
-  .carrotCount(3)
-  .bugCount(3)
+  .withGameDuration(5)
+  .withCarrotCount(3)
+  .withBugCount(3)
   .build();
 game.setGameStopListener((reason) => {
   let message;
