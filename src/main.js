@@ -1,4 +1,4 @@
-import GameBuilder from './game.js';
+import GameBuilder, { Reason } from './game.js';
 import PopUp from './popup.js';
 
 const gameFinishBanner = new PopUp();
@@ -10,13 +10,13 @@ const game = new GameBuilder() //
 game.setGameStopListener((reason) => {
   let message;
   switch (reason) {
-    case 'cancel':
+    case Reason.cancel:
       message = 'Replay?';
       break;
-    case 'win':
+    case Reason.lose:
       message = 'You win!';
       break;
-    case 'lose':
+    case Reason.win:
       message = 'You Lose';
       break;
 
